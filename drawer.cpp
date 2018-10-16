@@ -7,7 +7,7 @@ drawer::drawer(unordered_map<int, node>& ns, unordered_map<int, edge>& es){
 	edges = es;
 }
 
-void drawer::updateNodeClr(int id, RGB* c){
+void drawer::updateNodeClr(int id, RGB c){
 	// role : updates the color of the node with the given id with the given color, and draw it.
 	// in   : int id --> id of the node to change its color
 	//        RGB c  --> new color to be assigned to the node with the given id
@@ -16,7 +16,7 @@ void drawer::updateNodeClr(int id, RGB* c){
 	this->drawNode(id);
 }
 
-void drawer::updateEdgeClr(int id, RGB* c){
+void drawer::updateEdgeClr(int id, RGB c){
 	// role : updates the color of the edge with the given id with the given color, and draw it.
 	// in   : int id --> id of the edge to change its color
 	//        RGB c  --> new color to be assigned to the edge with the given id
@@ -25,7 +25,7 @@ void drawer::updateEdgeClr(int id, RGB* c){
 	this->drawEdge(id);
 }
 
-void drawer::drawGrid(int x_limit, int y_limit, RGB* color){
+void drawer::drawGrid(int x_limit, int y_limit, RGB color){
 	// rule : draws a grid for visual and testing purposes only.
 	// in   : x_limit --> max value to be displayed for x, e.g. -x_limit <= x <= x_limit
 	//        x_limit --> max value to be displayed for y, e.g. -y_limit <= y <= y_limit
@@ -69,7 +69,7 @@ void drawer::drawPath(vector<int>& path){
 	// delay_loops : number of loops spent as "nop"
 	float step = 0.1, theta;
 	int delay_loops = 1000;
-	point cur_node = nodes[*(path.begin())].location;   // read the first point 
+	point cur_node = nodes[*(path.begin())].location;   // read the first point
 	this->drawMover(cur_node);                          // draw our mover at this location
 	path.erase(path.begin());                           // erase the first node in the vector
 	while(path.size() > 0){
@@ -96,7 +96,7 @@ void drawer::drawPath(vector<int>& path){
 }
 
 // helper functions
-float euclidean_distance(point s, point e){
+float drawer :: euclidean_distance(point s, point e){
 	return sqrt((s.X - e.X)*(s.X - e.X) + (s.Y - e.Y)*(s.Y - e.Y));
 }
 
@@ -119,7 +119,7 @@ void drawer::drawNode(int id){
 	node cur = nodes[id];
 	glPushMatrix();
 	glTranslatef(cur.location.X, cur.location.Y, 0.0);
-	glColor3f(cur.color->red, cur.color->green, cur.color->blue);
+	glColor3f(cur.color.red, cur.color.green, cur.color.blue);
 	a->draw();
 	glPopMatrix();
 }
@@ -131,12 +131,12 @@ void drawer::drawEdge(int id){
 	edge e = edges[id];
 	point src = this->nodes[e.src_id].location,
 	      dst = this->nodes[e.dst_id].location;
-	RGB* color = e.color;
+	RGB color = e.color;
 
 	glPushMatrix();
 	glBegin(GL_LINES);
 	glLineWidth(0.1);
-	glColor3f(color->red, color->green, color->blue);
+	glColor3f(color.red, color.green, color.blue);
 	glVertex3f(src.X, src.Y, -10.0);
 	glVertex3f(dst.X, dst.Y, -10.0);
 	glPopMatrix();

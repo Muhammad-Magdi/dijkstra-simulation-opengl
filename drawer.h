@@ -15,38 +15,41 @@ using namespace std;
 struct RGB{
 	float red, green, blue;
 
-	RGB(float r, float g, float b){
+	RGB(float r = 1, float g = 1, float b = 1){
 		red = r;green = g;blue = b;
 	}
 };
 
 struct node{
 	point location;
-	RGB* color;
+	RGB color;
 
-	node(point p, RGB* c){
+	node(){}
+
+	node(point p, RGB c){
 		location = p;color = c;
 	}
 
 	node(point p){
 		location = p;
-		color->red = 1.0; color->green = 1.0; color->blue = 1.0;
 	}
 };
 
 struct edge{
 	int src_id, dst_id;
 	int cost;
-	RGB* color;
+	RGB color;
 
-	edge(int s, int e, int cst, RGB* c){
+	edge(){}
+
+	edge(int s, int e, int cst, RGB c){
 		src_id = s;dst_id = e;color = c;cost = cst;
 	}
 
-	edge(int s, int e,int cst = 1){
-		color->red = 1.0; color->green = 1.0; color->blue = 1.0;
+	edge(int s, int e, int cst = 1){
 		src_id = s;dst_id = e;cost = cst;
 	}
+
 };
 
 class drawer{
@@ -63,9 +66,9 @@ private:
 
 public:
 	drawer(unordered_map<int, node>&, unordered_map<int, edge>& );
-	void updateNodeClr(int, RGB*);
-	void updateEdgeClr(int, RGB*);
-	void drawGrid(int, int, RGB*);
+	void updateNodeClr(int, RGB);
+	void updateEdgeClr(int, RGB);
+	void drawGrid(int, int, RGB);
 	void drawPath(vector<int>&);
 	void reset(void);
 };
