@@ -139,5 +139,6 @@ void drawer::drawEdge(int id){
 	glColor3f(color.red, color.green, color.blue);
 	glVertex3f(src.X, src.Y, -10.0);
 	glVertex3f(dst.X, dst.Y, -10.0);
+	glEnd();
 	glPopMatrix();
 }
