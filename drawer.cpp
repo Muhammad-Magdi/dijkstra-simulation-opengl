@@ -43,6 +43,7 @@ void drawer::drawGrid(int x_limit, int y_limit, RGB* color){
 		glVertex3f(x_limit, i, -10.0);
 		glVertex3f(-x_limit, i, -10.0);
 	}
+	glEnd();
 	glPopMatrix();
 }
 
