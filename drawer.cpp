@@ -62,9 +62,9 @@ void drawer::reset(){
 }
 
 void drawer::setPath(vector<int> path){
-	this->path = path;  // set the current path 
+	this->path = path;  // set the current path
 	mover_location = nodes[*(this->path.begin())].location; // initialize start location
-	this->path.erase(path.begin()); // remove first point
+	this->path.erase(this->path.begin()); // remove first point
 }
 
 
@@ -91,7 +91,7 @@ void drawer::drawPath(){
 		mover_location.X += step * cos(theta);
 		mover_location.Y += step * sin(theta);
 	}
-	
+
 	// draw current node position
 	this->drawMover(mover_location);
 }
