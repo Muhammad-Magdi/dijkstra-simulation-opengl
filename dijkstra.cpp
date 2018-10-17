@@ -12,6 +12,8 @@ unordered_map<int, node>  nodes;
 unordered_map<int, edge> edges;
 int dis[N], parent[N];
 
+int i; // counter for timer function
+
 struct event{
 	bool isNode;
 	int id;
@@ -74,7 +76,6 @@ int main(int argc, char** argv) {
 	glutKeyboardFunc(handleKeypress);
 	glutReshapeFunc(handleResize);
 	glutTimerFunc(0, timer, 0);
-	//dr->updateNodeClr(3, RGB(1, 1, 0));
 	Dijkstra();
 	// display();
 	glutMainLoop(); //Start the main loop.  glutMainLoop doesn't return.
@@ -88,7 +89,11 @@ void display() {
 	glMatrixMode(GL_MODELVIEW); //Switch to the drawing perspective
 	glLoadIdentity(); //Reset the drawing perspective
 
+	char str[10];
+	
+	dr->renderbitmap(0.0, 0.0, GLUT_BITMAP_TIMES_ROMAN_24, str);
 	dr->reset();
+	dr->drawPath();
 
 	glEnd();
 	glPopMatrix();
@@ -107,7 +112,6 @@ void handleKeypress(unsigned char key, //The key that was pressed
 	}
 }
 
-int i;
 bool isDrawing;
 
 void timer(int){

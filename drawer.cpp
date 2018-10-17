@@ -121,6 +121,8 @@ void drawer::drawNode(int id){
 	glPushMatrix();
 	glTranslatef(cur.location.X, cur.location.Y, 0.0);
 	glColor3f(cur.color.red, cur.color.green, cur.color.blue);
+	char buf[5];sprintf_s(buf, "%d", id);
+	renderbitmap(0, 0, GLUT_BITMAP_TIMES_ROMAN_10, buf);
 	a->draw();
 	glPopMatrix();
 }
@@ -142,4 +144,13 @@ void drawer::drawEdge(int id){
 	glVertex3f(dst.X, dst.Y, -10.0);
 	glEnd();
 	glPopMatrix();
+}
+
+//show the characters in its position on the screen
+void drawer::renderbitmap(float x, float y, void *font, char *string) {
+	char *c;
+	glRasterPos2f(x, y);
+	for (c = string; *c != '\0'; c++) {
+		glutBitmapCharacter(font, *c);
+	}
 }

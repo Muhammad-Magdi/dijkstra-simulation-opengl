@@ -1,0 +1,10 @@
+In file included from drawer.h:82:0,
+                 from dijkstra.cpp:2:
+drawer.cpp: In member function ‘void drawer::drawNode(int)’:
+drawer.cpp:124:14: error: ‘sprintf_s’ was not declared in this scope
+  char buf[5];sprintf_s(buf, "%d", id);
+              ^~~~~~~~~
+drawer.cpp:124:14: note: suggested alternative: ‘sprintf’
+  char buf[5];sprintf_s(buf, "%d", id);
+              ^~~~~~~~~
+              sprintf
