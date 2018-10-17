@@ -64,6 +64,9 @@ private:
 	unordered_map<int, node> nodes;
 	unordered_map<int, edge> edges;
 
+	vector<int> path;
+	point mover_location;
+
 	void drawNode(int);
 	void drawEdge(int);
 	void drawMover(point);
@@ -74,7 +77,8 @@ public:
 	void updateNodeClr(int, RGB);
 	void updateEdgeClr(int, RGB);
 	void drawGrid(int, int, RGB);
-	void drawPath(vector<int>&);
+	void drawPath();
+	void setPath(vector<int>);
 	void reset(void);
 };
 

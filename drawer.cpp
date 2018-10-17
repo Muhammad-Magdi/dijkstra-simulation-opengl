@@ -61,8 +61,14 @@ void drawer::reset(){
 		this->drawEdge(e.X);
 }
 
+void drawer::setPath(vector<int> path){
+	this->path = path;  // set the current path 
+	mover_location = nodes[*(this->path.begin())].location; // initialize start location
+	this->path.erase(path.begin()); // remove first point
+}
 
-void drawer::drawPath(vector<int>& path){
+
+void drawer::drawPath(){
 	// role : draw the path given in ther parameter list
 	// in   : vector<int>& path --> vector of integers, each of which is the id for a node on the path to be displayed
 	// out  : void
@@ -70,32 +76,24 @@ void drawer::drawPath(vector<int>& path){
 	// step  : it's the distance moved by our moving node after each iteration
 	// theta : the slope angle of the current line to be traced (radians)
 	// delay_loops : number of loops spent as "nop"
-	float step = 0.1, theta;
-	int delay_loops = 1000;
-	point cur_node = nodes[*(path.begin())].location;   // read the first point
-	this->drawMover(cur_node);                          // draw our mover at this location
-	path.erase(path.begin());                           // erase the first node in the vector
-	while(path.size() > 0){
-		// update current position
-		point target_node = nodes[*(path.begin())].location; // read the first point in vector and take it as current target
-		// if target is reached
-		if(euclidean_distance(target_node, cur_node) <= 0.1){
-			cur_node = target_node;  // set current node to target
-			path.erase(path.begin());// remove target
-		}else{ // otherwise
-			// compute theta
-			theta = atan((cur_node.Y - target_node.Y)/(cur_node.X - target_node.X));
-			// update current node co-ordinates
-			cur_node.X += step * cos(theta);
-			cur_node.Y += step * sin(theta);
-		}
-		// draw current node position
-		this->drawMover(cur_node);
+	if(path.size() == 0)return;
 
-		// add delay
-		int cnt = delay_loops;
-		while(cnt--);
+	float step = 0.1, theta;
+	point target_node = nodes[*(path.begin())].location; // read the first point in vector and take it as current target
+	// if target is reached
+	if(euclidean_distance(target_node, mover_location) <= 0.1){
+		mover_location = target_node;  // set current node to target
+		path.erase(path.begin());// remove target
+	}else{ // otherwise
+		// compute theta
+		theta = atan((mover_location.Y - target_node.Y)/(mover_location.X - target_node.X));
+		// update current node co-ordinates
+		mover_location.X += step * cos(theta);
+		mover_location.Y += step * sin(theta);
 	}
+	
+	// draw current node position
+	this->drawMover(mover_location);
 }
 
 // helper functions
