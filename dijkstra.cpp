@@ -12,6 +12,8 @@ unordered_map<int, node>  nodes;
 unordered_map<int, edge> edges;
 int dis[N], parent[N];
 
+bool busy;
+
 struct event{
 	bool isNode;
 	int id;
@@ -99,7 +101,18 @@ void display() {
 void handleKeypress(unsigned char key, //The key that was pressed
 	int x, int y) {    //The current mouse coordinates
 	glutPostRedisplay();
+	cout << "key = " << key << " pressed" << endl;
 	switch (key){
+		case 13:	//Enter Key
+			if(!busy){
+				cin >> v;
+				// if(v < 1 || v > n)	break;
+				busy = 1;
+				getPath(v);
+				dr->drawPath(path);
+				busy = 0;
+			}
+			break;
 		case 27: //Escape key
 			printf("escape\n");
 			exit(0); //Exit the program
@@ -162,14 +175,14 @@ void Dijkstra(){
 		q.pop();
 		if(dis[u] < d)  continue;
 		if(u != src){
-			events.push_back(event(0, edgeID[{parent[u], u}], RGB(1.0, 0.0, 0.0)));
+			events.push_back(event(0, edgeID[{parent[u], u}], RGB(1.0f, 0.0f, 0.0f)));
 		}
-		events.push_back(event(1, u, RGB(0.0, 0.0, 1.0)));
+		events.push_back(event(1, u, RGB(0.0f, 0.0f, 1.0f)));
 		display();
 		for(pair<int, int> e : adj[u]){
 			int v = e.first, c = e.second;
 			if(dis[v] > dis[u] + c){
-				events.push_back(event(0, edgeID[{u, v}], RGB(1.0, 1.0, 0.0)));
+				events.push_back(event(0, edgeID[{u, v}], RGB(111, 37, 108)));
 				display();
 				dis[v] = dis[u] + c;
 				q.push({-dis[v], v});

@@ -18,6 +18,10 @@ struct RGB{
 	RGB(float r = 1, float g = 1, float b = 1){
 		red = r;green = g;blue = b;
 	}
+
+	RGB(int r, int g, int b){
+		red = r/255.0, green = g/255.0, blue = b/255.0;
+	}
 };
 
 struct node{
@@ -48,7 +52,7 @@ struct edge{
 
 	edge(int s, int e, int cst = 1){
 		src_id = s;dst_id = e;cost = cst;
-		color = RGB(0.5, 0.5, 0.5);	
+		color = RGB(0.5f, 0.5f, 0.5f);
 	}
 
 };
