@@ -43,7 +43,7 @@ void timer(int);
 void initRendering();
 
 int main(int argc, char** argv) {
-	freopen("i.in", "r", stdin);
+	// freopen("i.in", "r", stdin);
 
 	cin >> n >> m >> src;
 	for(int i = 0 ; i < m ; ++i){
@@ -105,11 +105,14 @@ void handleKeypress(unsigned char key, //The key that was pressed
 	switch (key){
 		case 13:	//Enter Key
 			if(!busy){
+				cout << "Enter The destination node number: ";
 				cin >> v;
-				// if(v < 1 || v > n)	break;
+				cout << v << endl;
+				if(v < 1 || v > n)	break;
 				busy = 1;
 				getPath(v);
-				dr->drawPath(path);
+				dr->setPath(path);
+				dr->drawPath();
 				busy = 0;
 			}
 			break;
@@ -121,18 +124,20 @@ void handleKeypress(unsigned char key, //The key that was pressed
 }
 
 int i;
-bool isDrawing;
 
 void timer(int){
 	glutPostRedisplay();
-	glutTimerFunc(1000, timer, 0);
+	glutTimerFunc(100, timer, 0);
 	if(i < events.size()){
+		busy = 1;
 		switch (events[i].isNode) {
 			case 1:	dr->updateNodeClr(events[i].id, events[i].color);
 				break;
 			case 0:	dr->updateEdgeClr(events[i].id, events[i].color);
 		}
 		++i;
+	}else{
+		busy = 0;
 	}
 }
 
@@ -155,15 +160,7 @@ void handleResize(int w, int h) {
 		200.0);                //The far z clipping coordinate
 }
 
-/*
-	Edge Color:
-		default = grey
-		in queue = white
-		used in relaxation = red
-	Node Color:
-		default = white
-		final state = blue
-*/
+
 void Dijkstra(){
 	priority_queue<pair<int, int> > q;
 	memset(dis, OO, sizeof dis);
@@ -175,14 +172,14 @@ void Dijkstra(){
 		q.pop();
 		if(dis[u] < d)  continue;
 		if(u != src){
-			events.push_back(event(0, edgeID[{parent[u], u}], RGB(1.0f, 0.0f, 0.0f)));
+			events.push_back(event(0, edgeID[{parent[u], u}], RGB(243, 155, 109)));
 		}
-		events.push_back(event(1, u, RGB(0.0f, 0.0f, 1.0f)));
+		events.push_back(event(1, u, RGB(62, 105, 144)));
 		display();
 		for(pair<int, int> e : adj[u]){
 			int v = e.first, c = e.second;
 			if(dis[v] > dis[u] + c){
-				events.push_back(event(0, edgeID[{u, v}], RGB(111, 37, 108)));
+				events.push_back(event(0, edgeID[{u, v}], RGB(0.5f, 0.5f, 0.5f)));
 				display();
 				dis[v] = dis[u] + c;
 				q.push({-dis[v], v});
@@ -216,8 +213,8 @@ void BFS(){     //used to classify the nodes into levels to be displayed
 
 void getPath(int v){
 	path.clear();
-	while(v != src){
-		path.push_back(parent[v]);
+	while(~v){
+		path.push_back(v);
 		v = parent[v];
 	}
 	reverse(path.begin(), path.end());
