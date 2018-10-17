@@ -48,7 +48,6 @@ struct edge{
 
 	edge(int s, int e, int cst = 1){
 		src_id = s;dst_id = e;cost = cst;
-		color = RGB(0.5, 0.5, 0.5);	
 	}
 
 };

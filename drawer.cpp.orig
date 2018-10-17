@@ -13,8 +13,7 @@ void drawer::updateNodeClr(int id, RGB c){
 	//        RGB c  --> new color to be assigned to the node with the given id
 	// out  : void
 	nodes[id].color = c;
-	// this->drawNode(id);
-	//this_thread::sleep_for(1s);
+	this->drawNode(id);
 }
 
 void drawer::updateEdgeClr(int id, RGB c){
@@ -23,8 +22,7 @@ void drawer::updateEdgeClr(int id, RGB c){
 	//        RGB c  --> new color to be assigned to the edge with the given id
 	// out  : void
 	edges[id].color = c;
-	// this->drawEdge(id);
-	//this_thread::sleep_for(1s);
+	this->drawEdge(id);
 }
 
 void drawer::drawGrid(int x_limit, int y_limit, RGB color){
@@ -36,7 +34,6 @@ void drawer::drawGrid(int x_limit, int y_limit, RGB color){
 	glPushMatrix();
 	glBegin(GL_LINES);
 	glLineWidth(0.1);
-	glColor3f(color.red, color.green, color.blue);
 	for(int i = -x_limit;i <= x_limit;i++){
 		glVertex3f(i, y_limit, -10.0);
 		glVertex3f(i, -y_limit, -10.0);
@@ -46,7 +43,6 @@ void drawer::drawGrid(int x_limit, int y_limit, RGB color){
 		glVertex3f(x_limit, i, -10.0);
 		glVertex3f(-x_limit, i, -10.0);
 	}
-	glEnd();
 	glPopMatrix();
 }
 
@@ -142,6 +138,5 @@ void drawer::drawEdge(int id){
 	glColor3f(color.red, color.green, color.blue);
 	glVertex3f(src.X, src.Y, -10.0);
 	glVertex3f(dst.X, dst.Y, -10.0);
-	glEnd();
 	glPopMatrix();
 }

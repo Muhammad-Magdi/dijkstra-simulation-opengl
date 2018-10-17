@@ -167,7 +167,7 @@ void tryThis(){
 
 	// draw path
 	drawPath();
-	
+
 	// draw grid
 	glPushMatrix();
 	glBegin(GL_LINES);
