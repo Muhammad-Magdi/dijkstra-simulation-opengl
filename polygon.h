@@ -32,7 +32,7 @@ private:
 	void __compute_vertices(point start);
 public:
 	polygon(int n, point c, float l);
-	void draw();
+	void draw(float lvl);
 	void move(point change);
 };
 

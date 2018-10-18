@@ -34,13 +34,13 @@ void polygon::__compute_vertices(point start){
 
 void polygon::move(point change){
 	glTranslatef(change.X, change.Y, 0);
-	draw();
+	draw(-10.0);
 }
 
-void polygon::draw(){
+void polygon::draw(float lvl){
 	// draw the polygon
     glBegin(GL_POLYGON);
         for(auto cur: v)
-            glVertex3f(cur.X, cur.Y, -10.0);
+            glVertex3f(cur.X, cur.Y, lvl);
     glEnd();
 }

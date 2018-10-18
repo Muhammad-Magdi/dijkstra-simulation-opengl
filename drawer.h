@@ -80,7 +80,7 @@ public:
 	void drawPath();
 	void setPath(vector<int>);
 	void reset(void);
-	void renderbitmap(float x, float y, void *font, char *string); //show the characters in its position on the screen
+	void renderbitmap(float x, float y, float z, void *font, string s); //show the characters in its position on the screen
 };
 
 #include "drawer.cpp"

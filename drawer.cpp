@@ -109,7 +109,7 @@ void drawer::drawMover(point loc){
 	glPushMatrix();
 	glTranslatef(loc.X, loc.Y, 0.0);
 	glColor3f(0.0, 1.0, 0.0);
-	mover->draw();
+	mover->draw(-9.8);
 	glPopMatrix();
 }
 
@@ -120,10 +120,11 @@ void drawer::drawNode(int id){
 	node cur = nodes[id];
 	glPushMatrix();
 	glTranslatef(cur.location.X, cur.location.Y, 0.0);
+	char buf[5];sprintf(buf, "%d", id);
+	glColor3f(1.0, 0.0, 0.0);
+	renderbitmap(-0.1, -0.1, -9.9, GLUT_BITMAP_HELVETICA_18, buf);
 	glColor3f(cur.color.red, cur.color.green, cur.color.blue);
-	char buf[5];sprintf_s(buf, "%d", id);
-	renderbitmap(0, 0, GLUT_BITMAP_TIMES_ROMAN_10, buf);
-	a->draw();
+	a->draw(-10.0);
 	glPopMatrix();
 }
 
@@ -135,10 +136,14 @@ void drawer::drawEdge(int id){
 	point src = this->nodes[e.src_id].location,
 	      dst = this->nodes[e.dst_id].location;
 	RGB color = e.color;
-
+	char buf[5];sprintf(buf, "%d", e.cost);
+	//printf("id : %d, src %d, dst %d, cost %d, %f %f\n", id, e.src_id, e.dst_id, e.cost, 
+	//	(src.X + dst.X)/2.0 , (src.Y + dst.Y)/2.0);
 	glPushMatrix();
 	glBegin(GL_LINES);
 	glLineWidth(0.1);
+	glColor3f(1.0, 1.0, 1.0);
+	renderbitmap((src.X + dst.X)/2.0 , (src.Y + dst.Y)/2.0, -9.9, GLUT_BITMAP_HELVETICA_18, buf);
 	glColor3f(color.red, color.green, color.blue);
 	glVertex3f(src.X, src.Y, -10.0);
 	glVertex3f(dst.X, dst.Y, -10.0);
@@ -147,10 +152,16 @@ void drawer::drawEdge(int id){
 }
 
 //show the characters in its position on the screen
-void drawer::renderbitmap(float x, float y, void *font, char *string) {
-	char *c;
-	glRasterPos2f(x, y);
-	for (c = string; *c != '\0'; c++) {
-		glutBitmapCharacter(font, *c);
+void drawer::renderbitmap(float x, float y, float z, void *font, string s) {
+	glRasterPos3f(x, y, z);
+	for (int i = 0; i < s.size(); i++) {
+		glutBitmapCharacter(font, (int)s[i]);
 	}
 }
+/*
+void drawer::renderbitmap(float x, float y, void *font, string s) {
+	glRasterPos3f(x, y, z);
+	for (int i = 0; i < s.size(); i++) {
+		glutBitmapCharacter(font, (int)s[i]);
+	}
+}*/
