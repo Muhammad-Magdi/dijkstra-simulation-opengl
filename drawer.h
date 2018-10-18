@@ -80,6 +80,7 @@ public:
 	void drawPath();
 	void setPath(vector<int>);
 	void reset(void);
+	bool isDrawing();
 	void renderbitmap(float x, float y, float z, void *font, string s); //show the characters in its position on the screen
 };
 

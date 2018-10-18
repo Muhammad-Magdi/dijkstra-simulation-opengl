@@ -40,6 +40,7 @@ void getPath(int v);
 void handleKeypress(unsigned char key, int x, int y);
 void handleResize(int w, int h);
 void timer(int);
+void timer1(int);
 void initRendering();
 
 int main(int argc, char** argv) {
@@ -50,7 +51,7 @@ int main(int argc, char** argv) {
 		scanf("%d %d %d", &u, &v, &c);
 		adj[u].push_back({v, c});
 		adj[v].push_back({u, c});
-		edges[i] = edge(u, v);
+		edges[i] = edge(u, v, c);
 		edgeID[{u, v}] = edgeID[{v, u}] = i;
 	}
 	BFS();
@@ -69,7 +70,7 @@ int main(int argc, char** argv) {
 	glutDisplayFunc(display);
 	glutKeyboardFunc(handleKeypress);
 	glutReshapeFunc(handleResize);
-	glutTimerFunc(0, timer, 0);
+	glutTimerFunc(0, timer1, 0);
 	Dijkstra();
 	// display();
 	glutMainLoop(); //Start the main loop.  glutMainLoop doesn't return.
@@ -103,19 +104,22 @@ void display() {
 void handleKeypress(unsigned char key, //The key that was pressed
 	int x, int y) {    //The current mouse coordinates
 	glutPostRedisplay();
-	cout << "key = " << key << " pressed" << endl;
+	//cout << "key = " << key << " pressed" << endl;
 	switch (key){
 		case 13:	//Enter Key
-			if(!busy){
+			if(!busy && !dr->isDrawing()){
 				cout << "Enter The destination node number: ";
 				cin >> v;
-				cout << v << endl;
-				if(v < 1 || v > n)	break;
-				busy = 1;
+				//cout << v << endl;
+				if(v < 1 || v > n){
+					printf("point out of range\n");
+					break;
+				}
+				//busy = 1;
 				getPath(v);
 				dr->setPath(path);
-				dr->drawPath();
-				busy = 0;
+				//dr->drawPath();
+				//busy = 0;
 			}
 			break;
 		case 27: //Escape key
@@ -138,6 +142,27 @@ void timer(int){
 			case 0:	dr->updateEdgeClr(events[i].id, events[i].color);
 		}
 		++i;
+	}else{
+		busy = 0;
+	}
+}
+
+int counter = 0;
+void timer1(int){
+	glutPostRedisplay();
+	glutTimerFunc(100, timer1, 0);
+	// this part should only work during simulation phase
+	if(counter % 5 == 0 && events.size() > 0){
+		busy = 1;
+		switch (events.begin()->isNode) {
+			case 1:	dr->updateNodeClr(events[i].id, events.begin()->color);
+				break;
+			case 0:	dr->updateEdgeClr(events[i].id, events.begin()->color);
+		}
+		events.erase(events.begin());
+		counter++;
+	}else if(events.size() > 0){
+		counter++;
 	}else{
 		busy = 0;
 	}

@@ -5,6 +5,7 @@ drawer::drawer(unordered_map<int, node>& ns, unordered_map<int, edge>& es){
 	//        unorderd_map<edge>& es --> descrption of graph edges
 	nodes = ns;
 	edges = es;
+	path.clear();
 }
 
 void drawer::updateNodeClr(int id, RGB c){
@@ -62,9 +63,14 @@ void drawer::reset(){
 }
 
 void drawer::setPath(vector<int> path){
+	//if(path.size() > 0)return;
 	this->path = path;  // set the current path
 	mover_location = nodes[*(this->path.begin())].location; // initialize start location
 	this->path.erase(this->path.begin()); // remove first point
+}
+
+bool drawer::isDrawing(){
+	return path.size();
 }
 
 
@@ -137,13 +143,13 @@ void drawer::drawEdge(int id){
 	      dst = this->nodes[e.dst_id].location;
 	RGB color = e.color;
 	char buf[5];sprintf(buf, "%d", e.cost);
+	glColor3f(1.0, 1.0, 1.0);
+	renderbitmap((src.X + dst.X)/2.0 - 0.1, (src.Y + dst.Y)/2.0, -9.9, GLUT_BITMAP_HELVETICA_12, buf);
 	//printf("id : %d, src %d, dst %d, cost %d, %f %f\n", id, e.src_id, e.dst_id, e.cost, 
 	//	(src.X + dst.X)/2.0 , (src.Y + dst.Y)/2.0);
 	glPushMatrix();
 	glBegin(GL_LINES);
 	glLineWidth(0.1);
-	glColor3f(1.0, 1.0, 1.0);
-	renderbitmap((src.X + dst.X)/2.0 , (src.Y + dst.Y)/2.0, -9.9, GLUT_BITMAP_HELVETICA_18, buf);
 	glColor3f(color.red, color.green, color.blue);
 	glVertex3f(src.X, src.Y, -10.0);
 	glVertex3f(dst.X, dst.Y, -10.0);
