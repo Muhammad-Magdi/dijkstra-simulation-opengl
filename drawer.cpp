@@ -85,11 +85,18 @@ void drawer::drawPath(){
 	if(path.size() == 0)return;
 
 	float step = 0.1, theta;
+	int target_id = *(path.begin());
 	point target_node = nodes[*(path.begin())].location; // read the first point in vector and take it as current target
 	// if target is reached
 	if(euclidean_distance(target_node, mover_location) <= 0.1){
 		mover_location = target_node;  // set current node to target
 		path.erase(path.begin());// remove target
+		if(path.size() != 0){
+			printf("passing through node %d\n", target_id);
+		}else{
+			printf("Reached node %d\n", target_id);
+			printf("-----------------------------------------------\n");
+		}
 	}else{ // otherwise
 		// compute theta
 		theta = atan((mover_location.Y - target_node.Y)/(mover_location.X - target_node.X));
@@ -103,7 +110,7 @@ void drawer::drawPath(){
 }
 
 // helper functions
-float drawer :: euclidean_distance(point s, point e){
+float drawer::euclidean_distance(point s, point e){
 	return sqrt((s.X - e.X)*(s.X - e.X) + (s.Y - e.Y)*(s.Y - e.Y));
 }
 
@@ -126,9 +133,12 @@ void drawer::drawNode(int id){
 	node cur = nodes[id];
 	glPushMatrix();
 	glTranslatef(cur.location.X, cur.location.Y, 0.0);
-	char buf[5];sprintf(buf, "%d", id);
 	glColor3f(1.0, 0.0, 0.0);
-	renderbitmap(-0.1, -0.1, -9.9, GLUT_BITMAP_HELVETICA_18, buf);
+	char buf[5];sprintf(buf, "%d", id);
+	if(id < 10)
+		renderbitmap(-0.1, -0.1, -9.9, GLUT_BITMAP_HELVETICA_18, buf);
+	else
+		renderbitmap(-0.2, -0.1, -9.9, GLUT_BITMAP_9_BY_15, buf);
 	glColor3f(cur.color.red, cur.color.green, cur.color.blue);
 	a->draw(-10.0);
 	glPopMatrix();

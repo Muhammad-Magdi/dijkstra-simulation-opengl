@@ -45,16 +45,27 @@ void initRendering();
 
 int main(int argc, char** argv) {
 	// freopen("i.in", "r", stdin);
+	// reading graph descrption
+	cout << "Welcome to dijkstra simulator\n";
+	cout << "enter number of nodes : ";cin >> n;
+	cout << "enter number of edges : ";cin >> m;
+	cout << "enter source node id  : ";cin >> src;
 
-	cin >> n >> m >> src;
+	cout << "enter " << m << " egdes.\nfor each you are to enter Start_node end_node edge_cost\n";
 	for(int i = 0 ; i < m ; ++i){
+		printf("enter data for %d edge : ", i + 1);
 		scanf("%d %d %d", &u, &v, &c);
 		adj[u].push_back({v, c});
 		adj[v].push_back({u, c});
 		edges[i] = edge(u, v, c);
 		edgeID[{u, v}] = edgeID[{v, u}] = i;
 	}
+
+	// assign points to nodes such that nodes with same level of BFS have same x_axis value,
+	// and spreded on y_axis based on their number
 	BFS();
+
+	// initialize the drawing object
 	dr = new drawer(nodes, edges);
 	
 	//Initialize GLUT
@@ -71,18 +82,14 @@ int main(int argc, char** argv) {
 	glutKeyboardFunc(handleKeypress);
 	glutReshapeFunc(handleResize);
 	glutTimerFunc(0, timer1, 0);
+
+	// make the dijkstra preprocessing
+	printf("starting dijkstra simulation\n");
 	Dijkstra();
+
 	// display();
 	glutMainLoop(); //Start the main loop.  glutMainLoop doesn't return.
 	return 0;
-}
-
-void renderbitmap(float x, float y, void *font, char *string) {
-	char *c;
-	glRasterPos2f(x, y);
-	for (c = string; *c != '\0'; c++) {
-		glutBitmapCharacter(font, *c);
-	}
 }
 
 void display() {
@@ -92,6 +99,10 @@ void display() {
 	glMatrixMode(GL_MODELVIEW); //Switch to the drawing perspective
 	glLoadIdentity(); //Reset the drawing perspective
 	
+	// add some nice caption
+	glColor3f(0.0, 1.0, 0.0);
+	dr->renderbitmap(-2.0, 3.0, -10.0, GLUT_BITMAP_HELVETICA_18, "GLUT dijkstra simulation");
+
 	dr->reset();
 	dr->drawPath();
 
@@ -108,18 +119,15 @@ void handleKeypress(unsigned char key, //The key that was pressed
 	switch (key){
 		case 13:	//Enter Key
 			if(!busy && !dr->isDrawing()){
+				cout << "==============================================\n";
 				cout << "Enter The destination node number: ";
 				cin >> v;
-				//cout << v << endl;
 				if(v < 1 || v > n){
 					printf("point out of range\n");
 					break;
 				}
-				//busy = 1;
 				getPath(v);
 				dr->setPath(path);
-				//dr->drawPath();
-				//busy = 0;
 			}
 			break;
 		case 27: //Escape key
@@ -130,24 +138,8 @@ void handleKeypress(unsigned char key, //The key that was pressed
 }
 
 int i;
-
-void timer(int){
-	glutPostRedisplay();
-	glutTimerFunc(100, timer, 0);
-	if(i < events.size()){
-		busy = 1;
-		switch (events[i].isNode) {
-			case 1:	dr->updateNodeClr(events[i].id, events[i].color);
-				break;
-			case 0:	dr->updateEdgeClr(events[i].id, events[i].color);
-		}
-		++i;
-	}else{
-		busy = 0;
-	}
-}
-
 int counter = 0;
+
 void timer1(int){
 	glutPostRedisplay();
 	glutTimerFunc(100, timer1, 0);
@@ -199,7 +191,7 @@ void Dijkstra(){
 		q.pop();
 		if(dis[u] < d)  continue;
 		if(u != src){
-			events.push_back(event(0, edgeID[{parent[u], u}], RGB(243, 155, 109)));
+			events.push_back(event(0, edgeID[{parent[u], u}], RGB(255, 0, 255)));
 		}
 		events.push_back(event(1, u, RGB(62, 105, 144)));
 		display();
